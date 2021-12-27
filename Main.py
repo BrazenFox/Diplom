@@ -6,13 +6,20 @@ from functools import reduce
 import scipy.special
 from scipy.stats import binom
 from Cascade import Cascade
-from CascadeAnalizer import Analizer
+from Analizer import Analizer
+from RunAnalizer import RunAnalizer
 import seaborn as sb
 import matplotlib.pyplot as plt
 
-accuracy = 0.8
+
+
+confidence_level = [0.8, 0.9, 0.99, 0.999]
 averaging = 1
-count_of_raunds_for_cascade = 4
+count_of_raunds_for_cascade = [2, 4, 6, 8]
+fix_count_of_raunds_for_cascade=4
+fix_confidence_level=0.9
+e = [0.1, 0.01, 0.001, 0.0001]
+p = [0.1, 0.01, 0.001, 0.0001]
 """n_array = [[100, 300, 1000, 3000, 10000],
            [300, 1000, 3000, 10000, 30000],
            [1000, 3000, 10000, 30000, 100000],
@@ -23,29 +30,109 @@ n_array = [[100, 300, 1000, 3000, 10000],
            [3000, 10000]]
 
 
+r = RunAnalizer(confidence_level,averaging, count_of_raunds_for_cascade, e,p,n_array)
+array_e_p, array_E_p, array_e_P = r.RunForConfidenceLevel(fix_count_of_raunds_for_cascade)
+
+iterator = 0
+for i in range(len(confidence_level)):
+    plt.xlabel('Count of bits')
+    plt.ylabel('Safe baud rate')
+    plt.xscale('log')
+    plt.title(f'safe baud rate depending on the probability of a bit error \n number of rounds={fix_count_of_raunds_for_cascade} \n confidence level={confidence_level[i]}')
+    for j in range(len(n_array)):
+        plt.plot(n_array[j], [array_e_p[i][j][k] / n_array[j][k] for k in range(len(n_array[j]))], label=f'e={e[j]},p={p[j]}')
+    plt.legend()
+    plt.grid(True)
+    iterator+=1
+    plt.savefig(f'{iterator} ep number of rounds={fix_count_of_raunds_for_cascade}, confidence level={confidence_level[i]}.png')
+    plt.show()
+
+    plt.xlabel('Count of bits')
+    plt.ylabel('Safe baud rate')
+    plt.xscale('log')
+    plt.title(f'safe baud rate depending on the probability of a bit error \n number of rounds={fix_count_of_raunds_for_cascade} \n confidence level={confidence_level[i]}')
+    for j in range(len(n_array)):
+        plt.plot(n_array[j], [array_E_p[i][j][k] / n_array[j][k] for k in range(len(n_array[j]))], label=f'e={e[0]},p={p[j]}')
+    plt.legend()
+    plt.grid(True)
+    iterator += 1
+    plt.savefig(f'{iterator} Ep number of rounds={fix_count_of_raunds_for_cascade}, confidence level={confidence_level[i]}.png')
+    plt.show()
+
+    plt.xlabel('Count of bits')
+    plt.ylabel('Safe baud rate')
+    plt.xscale('log')
+    plt.title(f'safe baud rate depending on the probability of a bit error \n number of rounds={fix_count_of_raunds_for_cascade} \n confidence level={confidence_level[i]}')
+    for j in range(len(n_array)):
+        plt.plot(n_array[j], [array_e_P[i][j][k] / n_array[j][k] for k in range(len(n_array[j]))], label=f'e={e[j]},p={p[0]}')
+    plt.legend()
+    plt.grid(True)
+    iterator += 1
+    plt.savefig(f'{iterator} eP number of rounds={fix_count_of_raunds_for_cascade}, confidence level={confidence_level[i]}.png')
+    plt.show()
+
+array_e_p, array_E_p, array_e_P = r.RunForCountOfRaundsForCascade(fix_confidence_level)
+
+for i in range(len(count_of_raunds_for_cascade)):
+    plt.xlabel('Count of bits')
+    plt.ylabel('Safe baud rate')
+    plt.xscale('log')
+    plt.title(f'safe baud rate depending on the probability of a bit error \n number of rounds={count_of_raunds_for_cascade[i]} \n confidence level={fix_confidence_level}')
+    for j in range(len(n_array)):
+        plt.plot(n_array[j], [array_e_p[i][j][k] / n_array[j][k] for k in range(len(n_array[j]))], label=f'e={e[j]},p={p[j]}')
+    plt.legend()
+    plt.grid(True)
+    iterator += 1
+    plt.savefig(f'{iterator} ep number of rounds={count_of_raunds_for_cascade[i]}, confidence level={fix_confidence_level}.png')
+    plt.show()
+
+    plt.xlabel('Count of bits')
+    plt.ylabel('Safe baud rate')
+    plt.xscale('log')
+    plt.title(f'safe baud rate depending on the probability of a bit error \n number of rounds={count_of_raunds_for_cascade[i]} \n confidence level={fix_confidence_level}')
+    for j in range(len(n_array)):
+        plt.plot(n_array[j], [array_E_p[i][j][k] / n_array[j][k] for k in range(len(n_array[j]))], label=f'e={e[0]},p={p[j]}')
+    plt.legend()
+    plt.grid(True)
+    iterator += 1
+    plt.savefig(f'{iterator} Ep number of rounds={count_of_raunds_for_cascade[i]}, confidence level={fix_confidence_level}.png')
+    plt.show()
+
+    plt.xlabel('Count of bits')
+    plt.ylabel('Safe baud rate')
+    plt.xscale('log')
+    plt.title(f'safe baud rate depending on the probability of a bit error \n number of rounds={count_of_raunds_for_cascade[i]} \n confidence level={fix_confidence_level}')
+    for j in range(len(n_array)):
+        plt.plot(n_array[j], [array_e_P[i][j][k] / n_array[j][k] for k in range(len(n_array[j]))], label=f'e={e[j]},p={p[0]}')
+    plt.legend()
+    plt.grid(True)
+    iterator += 1
+    plt.savefig(f'{iterator} eP number of rounds={count_of_raunds_for_cascade[i]}, confidence level={fix_confidence_level}.png')
+    plt.show()
+
+
+
+
+"""
 array_e_p = [[] for i in range(4)]
 array_E_p = [[] for i in range(4)]
 array_e_P = [[] for i in range(4)]
-e = [0.1, 0.01, 0.001, 0.0001]
-p = [0.1, 0.01, 0.001, 0.0001]
 
 for i in range(4):
     for n in n_array[i]:
         print(n)
-        analizer = Analizer(n, p[i], e[i], accuracy, averaging, count_of_raunds_for_cascade)
+        analizer = Analizer(n, p[i], e[i], confidence_level, averaging, count_of_raunds_for_cascade)
         array_e_p[i].append(analizer.RunCascade())
 for i in range(4):
     for n in n_array[i]:
         print(n)
-        analizer = Analizer(n, p[i], 0.1, accuracy, averaging, count_of_raunds_for_cascade)
+        analizer = Analizer(n, p[i], 0.1, confidence_level, averaging, count_of_raunds_for_cascade)
         array_E_p[i].append(analizer.RunCascade())
 for i in range(4):
     for n in n_array[i]:
         print(n)
-        analizer = Analizer(n, 0.1, e[i], accuracy, averaging, count_of_raunds_for_cascade)
+        analizer = Analizer(n, 0.1, e[i], confidence_level, averaging, count_of_raunds_for_cascade)
         array_e_P[i].append(analizer.RunCascade())
-
-
 
 plt.xlabel('Count of bits')
 plt.ylabel('Safe baud rate')
@@ -72,11 +159,7 @@ plt.plot(n_array[2], [array_e_P[2][i] / n_array[2][i] for i in range(len(n_array
 plt.plot(n_array[3], [array_e_P[3][i] / n_array[3][i] for i in range(len(n_array[3]))], label='e=0.0001, p=0.1 ')
 plt.legend()
 plt.grid(True)
-plt.show()
-
-
-
-
+plt.show()"""
 
 """ep=np.arange(0.001,0.2, 0.001)
 res2=[]

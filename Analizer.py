@@ -63,3 +63,7 @@ class Analizer:
         return result
 
 
+
+
+
+
