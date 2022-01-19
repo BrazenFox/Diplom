@@ -52,7 +52,6 @@ class Cascade:
                     Block_A, Block_B = self.fill_blocks(j)
                     if self.equals_parity_on_Bob(Block_A, Block_B):
                         blocks.append(self.fill_blocks(j))
-                    # можно оптимизировать, так как не может найтись блоков больше чем количество раундов на данный момент прошло
         return blocks
 
     def min_K(self, K):
@@ -90,9 +89,6 @@ class Cascade:
             else:
                 shuffle(numbers)
                 ww = math.ceil(self.n / count_of_blocks)
-
-                # delimetr = [0] + [i * ww + randint(-ww // 4, ww // 4) for i in range(1, count_of_blocks)] + [self.n]
-
                 delimetr=[]
                 for i in range(1, count_of_blocks):
                     num = i * ww + randint(-ww // 4, ww // 4)
@@ -100,33 +96,9 @@ class Cascade:
                     delimetr.append(num)
                 delimetr = [0] + delimetr + [self.n]
                 for i in range(count_of_blocks):
-                    if delimetr[i] == delimetr[i + 1]:
-                        print("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq")
                     blocks[i] = numbers[delimetr[i]:delimetr[i + 1]]
-
-                """start = 0
-                end = int(normalvariate(w, w//2)) #randint(w // 2, w + w // 2)
-                for j in range(count_of_blocks):
-                    blocks[j]=numbers[start:end]
-                    start = end
-                    if j == count_of_blocks - 1:
-                        end = self.n-1
-                    else:
-                        end += int(normalvariate(w, w//2))"""
-
-            """for j in range(self.n):
-                if raund == 0:
-                    blocks[int(j // w)].append(j)
-                else:
-                    # blocks[randint(0, count_of_blocks - 1)].append(j)
-                    bit = choice(numbers)
-                    numbers.remove(bit)
-                    blocks[int(j // w)].append(bit)"""
             K[raund] = blocks
             w = 2 * w
-        """for k in K:
-            for b in k:
-                print(b)"""
         return K
 
     def parity(self, block):

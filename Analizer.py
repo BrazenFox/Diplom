@@ -55,9 +55,6 @@ class Analizer:
             a, b = self.select_a_b(self.n, self.count_errors)
             cascade = Cascade(a, b, self.p, self.count_of_raunds_for_cascade)
             count_non_fixed_error = cascade.start()
-            """if count_non_fixed_error > 0:
-                print("error", count_non_fixed_error)
-                break"""
             result += self.binomialEva(int(self.n - cascade.iter), self.e)
         result //= self.averaging
         return result

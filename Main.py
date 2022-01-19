@@ -14,20 +14,21 @@ import matplotlib.pyplot as plt
 
 
 confidence_level = [0.8, 0.9, 0.99, 0.999]
-averaging = 1
+averaging = 3
 count_of_raunds_for_cascade = [2, 4, 6, 8]
 fix_count_of_raunds_for_cascade=4
 fix_confidence_level=0.9
-e = [0.1, 0.01, 0.001, 0.0001]
-p = [0.1, 0.01, 0.001, 0.0001]
-"""n_array = [[100, 300, 1000, 3000, 10000],
-           [300, 1000, 3000, 10000, 30000],
+e = [0.15, 0.1, 0.01, 0.001, 0.0001]
+p = [0.15, 0.1, 0.01, 0.001, 0.0001]
+n_array = [[100, 300, 1000, 3000, 10000, 30000, 100000],
+           [100, 300, 1000, 3000, 10000, 30000, 100000],
+           [300, 1000, 3000, 10000, 30000, 100000],
            [1000, 3000, 10000, 30000, 100000],
-           [3000, 10000, 30000, 100000, 300000]]"""
-n_array = [[100, 300, 1000, 3000, 10000],
+           [3000, 10000, 30000, 100000]]
+"""n_array = [[100, 300, 1000, 3000, 10000],
            [300, 1000, 3000, 10000],
-           [1000, 3000, 10000],
-           [3000, 10000]]
+           [1000, 3000, 10000, 30000],
+           [3000, 10000, 30000, 100000]]"""
 
 
 r = RunAnalizer(confidence_level,averaging, count_of_raunds_for_cascade, e,p,n_array)
@@ -35,40 +36,40 @@ array_e_p, array_E_p, array_e_P = r.RunForConfidenceLevel(fix_count_of_raunds_fo
 
 iterator = 0
 for i in range(len(confidence_level)):
-    plt.xlabel('Count of bits')
-    plt.ylabel('Safe baud rate')
+    plt.xlabel('количество бит')
+    plt.ylabel('Безопасная скорость передачи')
     plt.xscale('log')
-    plt.title(f'safe baud rate depending on the probability of a bit error \n number of rounds={fix_count_of_raunds_for_cascade} \n confidence level={confidence_level[i]}')
+    plt.title(f'Безопасная скорость передачи в зависимости от длины сообщения при различных вероятностях ошибок \n количество раундов={fix_count_of_raunds_for_cascade} \n d={confidence_level[i]}')
     for j in range(len(n_array)):
         plt.plot(n_array[j], [array_e_p[i][j][k] / n_array[j][k] for k in range(len(n_array[j]))], label=f'e={e[j]},p={p[j]}')
     plt.legend()
     plt.grid(True)
     iterator+=1
-    plt.savefig(f'{iterator} ep number of rounds={fix_count_of_raunds_for_cascade}, confidence level={confidence_level[i]}.png')
+    plt.savefig(f'results/{iterator} ep number of rounds={fix_count_of_raunds_for_cascade}, confidence level={confidence_level[i]}.png')
     plt.show()
 
     plt.xlabel('Count of bits')
     plt.ylabel('Safe baud rate')
     plt.xscale('log')
-    plt.title(f'safe baud rate depending on the probability of a bit error \n number of rounds={fix_count_of_raunds_for_cascade} \n confidence level={confidence_level[i]}')
+    plt.title(f'Безопасная скорость передачи в зависимости от длины сообщения при различных вероятностях ошибок \n количество раундов={fix_count_of_raunds_for_cascade} \n d={confidence_level[i]}')
     for j in range(len(n_array)):
         plt.plot(n_array[j], [array_E_p[i][j][k] / n_array[j][k] for k in range(len(n_array[j]))], label=f'e={e[0]},p={p[j]}')
     plt.legend()
     plt.grid(True)
     iterator += 1
-    plt.savefig(f'{iterator} Ep number of rounds={fix_count_of_raunds_for_cascade}, confidence level={confidence_level[i]}.png')
+    plt.savefig(f'results/{iterator} Ep number of rounds={fix_count_of_raunds_for_cascade}, confidence level={confidence_level[i]}.png')
     plt.show()
 
     plt.xlabel('Count of bits')
     plt.ylabel('Safe baud rate')
     plt.xscale('log')
-    plt.title(f'safe baud rate depending on the probability of a bit error \n number of rounds={fix_count_of_raunds_for_cascade} \n confidence level={confidence_level[i]}')
+    plt.title(f'Безопасная скорость передачи в зависимости от длины сообщения при различных вероятностях ошибок \n количество раундов={fix_count_of_raunds_for_cascade} \n d={confidence_level[i]}')
     for j in range(len(n_array)):
         plt.plot(n_array[j], [array_e_P[i][j][k] / n_array[j][k] for k in range(len(n_array[j]))], label=f'e={e[j]},p={p[0]}')
     plt.legend()
     plt.grid(True)
     iterator += 1
-    plt.savefig(f'{iterator} eP number of rounds={fix_count_of_raunds_for_cascade}, confidence level={confidence_level[i]}.png')
+    plt.savefig(f'results/{iterator} eP number of rounds={fix_count_of_raunds_for_cascade}, confidence level={confidence_level[i]}.png')
     plt.show()
 
 array_e_p, array_E_p, array_e_P = r.RunForCountOfRaundsForCascade(fix_confidence_level)
@@ -77,37 +78,37 @@ for i in range(len(count_of_raunds_for_cascade)):
     plt.xlabel('Count of bits')
     plt.ylabel('Safe baud rate')
     plt.xscale('log')
-    plt.title(f'safe baud rate depending on the probability of a bit error \n number of rounds={count_of_raunds_for_cascade[i]} \n confidence level={fix_confidence_level}')
+    plt.title(f'Безопасная скорость передачи в зависимости от длины сообщения при различных вероятностях ошибок \n количество раундов={fix_count_of_raunds_for_cascade} \n d={confidence_level[i]}')
     for j in range(len(n_array)):
         plt.plot(n_array[j], [array_e_p[i][j][k] / n_array[j][k] for k in range(len(n_array[j]))], label=f'e={e[j]},p={p[j]}')
     plt.legend()
     plt.grid(True)
     iterator += 1
-    plt.savefig(f'{iterator} ep number of rounds={count_of_raunds_for_cascade[i]}, confidence level={fix_confidence_level}.png')
+    plt.savefig(f'results/{iterator} ep number of rounds={count_of_raunds_for_cascade[i]}, confidence level={fix_confidence_level}.png')
     plt.show()
 
     plt.xlabel('Count of bits')
     plt.ylabel('Safe baud rate')
     plt.xscale('log')
-    plt.title(f'safe baud rate depending on the probability of a bit error \n number of rounds={count_of_raunds_for_cascade[i]} \n confidence level={fix_confidence_level}')
+    plt.title(f'Безопасная скорость передачи в зависимости от длины сообщения при различных вероятностях ошибок \n количество раундов={fix_count_of_raunds_for_cascade} \n d={confidence_level[i]}')
     for j in range(len(n_array)):
         plt.plot(n_array[j], [array_E_p[i][j][k] / n_array[j][k] for k in range(len(n_array[j]))], label=f'e={e[0]},p={p[j]}')
     plt.legend()
     plt.grid(True)
     iterator += 1
-    plt.savefig(f'{iterator} Ep number of rounds={count_of_raunds_for_cascade[i]}, confidence level={fix_confidence_level}.png')
+    plt.savefig(f'results/{iterator} Ep number of rounds={count_of_raunds_for_cascade[i]}, confidence level={fix_confidence_level}.png')
     plt.show()
 
     plt.xlabel('Count of bits')
     plt.ylabel('Safe baud rate')
     plt.xscale('log')
-    plt.title(f'safe baud rate depending on the probability of a bit error \n number of rounds={count_of_raunds_for_cascade[i]} \n confidence level={fix_confidence_level}')
+    plt.title(f'Безопасная скорость передачи в зависимости от длины сообщения при различных вероятностях ошибок \n количество раундов={fix_count_of_raunds_for_cascade} \n d={confidence_level[i]}')
     for j in range(len(n_array)):
         plt.plot(n_array[j], [array_e_P[i][j][k] / n_array[j][k] for k in range(len(n_array[j]))], label=f'e={e[j]},p={p[0]}')
     plt.legend()
     plt.grid(True)
     iterator += 1
-    plt.savefig(f'{iterator} eP number of rounds={count_of_raunds_for_cascade[i]}, confidence level={fix_confidence_level}.png')
+    plt.savefig(f'results/{iterator} eP number of rounds={count_of_raunds_for_cascade[i]}, confidence level={fix_confidence_level}.png')
     plt.show()
 
 
